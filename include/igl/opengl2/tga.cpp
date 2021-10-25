@@ -41,7 +41,7 @@
  */
 
 #include "tga.h"
-#include "glext.h"
+//#include "glext.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

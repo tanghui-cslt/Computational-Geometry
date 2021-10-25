@@ -757,7 +757,7 @@ void set_id_uv(int id,string uv_sym)
 	{
 		for (int i = 0; i < v_size; i++)
 		{
-			uv.row(i) << all_ver_u[id][i], 0;
+			uv.row(i) << all_ver_u[id][i], 0.1;
 		}
 	}
 }
@@ -766,7 +766,7 @@ void init(MyMesh *mesh, int id, igl::viewer::Viewer &viewer, string uv_sym)
 
 	//optimized_v(mesh, N_faces, star_w);
 	Eigen::Matrix<unsigned char, Eigen::Dynamic, Eigen::Dynamic> R, G, B, A;
-	bool flag = igl::png::readPNG(TUTORIAL_SHARED_PATH "/check_rotate.png", R, G, B, A);
+	bool flag = igl::png::readPNG(TUTORIAL_SHARED_PATH "/checker_512.png", R, G, B, A);
 	/*Eigen::VectorXd temp_u = uv.col(0);
 	Eigen::VectorXd temp_v = normalized_vec(temp_u);
 	uv.col(0) = temp_v;

@@ -86,7 +86,7 @@ bool init_new_window(igl::viewer::Viewer &viewer)
 
 	viewer.ngui->addWindow(Eigen::Vector2i(300, 10), "Harmanic 1 form");
 	//viewer.ngui->addButton("lv rou huo shao", [&]() {touch_flag = !touch_flag; });
-	viewer.ngui->addButton("calc homology group generator ", [&]() {
+	viewer.ngui->addButton("calc homology group generators ", [&]() {
 		libigl_touch_fire(mesh, viewer, Q_Fh, Mesh_Color);
 		int value = libigl_show_lines(mesh, viewer);
 		while (value != 0)

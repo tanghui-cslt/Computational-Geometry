@@ -5,19 +5,57 @@
 
 <https://github.com/libigl/libigl/>
 
-> Get started with:
->
+## Get started with:
+
+1. Downloading res
 ```bash
-git clone --recursive https://github.com/libigl/libigl.git
+git clone --recursive https://github.com/tanghui-cslt/Computational-Geometry.git
 ```
 
-libigl is a simple C++ geometry processing library. We have a wide
-functionality including construction of sparse discrete differential geometry
-operators and finite-elements matrices such as the cotangent Laplacian and
-diagonalized mass matrix, simple facet and edge-based topology data structures,
-mesh-viewing utilities for OpenGL and GLSL, and many core functions for matrix
-manipulation which make [Eigen](http://eigen.tuxfamily.org) feel a lot more
-like MATLAB.
+* Windows
+
+The core libigl functionality only depends on the C++ Standard Library and
+Eigen.
+
+To build all the examples in the tutorial, you can use the CMakeLists.txt in
+the tutorial folder:
+On my computer, 
+
+```bash
+cd tutorial
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release -G "Visual Studio 15 2017 Win64" ../
+```
+and open `libigl_tutorials.sln` via visual stduio.
+For different version of visual studio,  the instruction of cmake is different. such as, for visual studio 2015, you should use " Visual Studio 14 2015" to specify it.  So the last instruction should be modified by:
+
+```bash
+cd tutorial
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release -G "Visual Studio 14 2015 Win64" ../
+```
+
+Notice: you must choose x64 compiler on windows.
+
+
+* Linux
+
+```bash
+cd tutorial
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release  ../
+make -j8
+```
+
+
+## Example
+
+* 1-Conformal Mapping.
+
+it's a conformal mapping, which maps a closed 2-dim surface to a ball conformally. 
 
 It is **a header-only library**. You do not need to compile anything to use,
 just include igl headers (e.g. `#include <igl/cotmatrix.h>`) and run.  Each
