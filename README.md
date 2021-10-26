@@ -52,7 +52,7 @@ cmake -DCMAKE_BUILD_TYPE=Release  ../
 make -j8
 ```
 
-Notice: I just compile it on wsl2 (ubuntu 18.04) successfully, and I think it works on linux as well.
+Notice: I just compile it on wsl2 (ubuntu 18.04) successfully, and I think it will works on linux as well.
 
 ## Example
 
@@ -72,7 +72,7 @@ in `build` directory,
 ```
 
 it's a conformal mapping, which maps a closed 2-dim surface to a ball conformally. 
-![](https://www.youtube.com/watch?v=EH7h7xJbSqo)
+[![Watch the video](https://img.youtube.com/vi/<EH7h7xJbSqo>/maxresdefault.jpg)](https://www.youtube.com/watch?v=EH7h7xJbSqo)
 
 ### 2-Conformal Mapping.
 
@@ -90,7 +90,9 @@ in `build` directory,
 ```
 
 it's a conformal mapping, which maps a closed 2-dim surface to a ball conformally. 
+
 ![](https://www.youtube.com/watch?v=DXdiTTghm_0)
+
 This repository is based on libigl-1.2 and openmesh-8.0. If you want learn more about them, please see here.
 
 `https://github.com/libigl/libigl`
