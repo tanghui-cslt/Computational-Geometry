@@ -1,7 +1,7 @@
 
 ## Get started with:
 
-1. Downloading res
+** Downloading repository
 ```bash
 git clone --recursive https://github.com/tanghui-cslt/Computational-Geometry.git
 ```
@@ -13,7 +13,7 @@ Eigen.
 
 To build all the examples in the tutorial, you can use the CMakeLists.txt in
 the tutorial folder:
-On my computer, 
+On my computer(vs 2017)
 
 ```bash
 cd tutorial
@@ -21,20 +21,28 @@ mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release -G "Visual Studio 15 2017 Win64" ../
 ```
-and open `libigl_tutorials.sln` via visual stduio.
-For different version of visual studio,  the instruction of cmake is different. such as, for visual studio 2015, you should use " Visual Studio 14 2015" to specify it.  So the last instruction should be modified by:
 
-```bash
-cd tutorial
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=Release -G "Visual Studio 14 2015 Win64" ../
-```
 
-Notice: you must choose x64 compiler on windows.
+Notice: libigl only supports the Microsoft Visual Studio 2015 compiler and later, in 64bit mode. It will not work with a 32bit build and it will not work with older versions of visual studio.
 
 
 * Linux
+
+Many linux distributions do not include gcc and the basic development tools in their default installation. On Ubuntu, you need to install the following packages:
+
+```bash
+sudo apt-get install git
+sudo apt-get install build-essential
+sudo apt-get install cmake
+sudo apt-get install libx11-dev
+sudo apt-get install mesa-common-dev libgl1-mesa-dev libglu1-mesa-dev
+sudo apt-get install libxrandr-dev
+sudo apt-get install libxi-dev
+sudo apt-get install libxmu-dev
+sudo apt-get install libblas-dev
+```
+
+and then 
 
 ```bash
 cd tutorial
@@ -48,7 +56,7 @@ Notice: I just compile it on wsl2 (ubuntu 18.04) successfully, and I think it wo
 
 ## Example
 
-* 1-Conformal Mapping.
+** 1-Conformal Mapping.
 
 * Windows
 
@@ -64,9 +72,9 @@ in `build` directory,
 ```
 
 it's a conformal mapping, which maps a closed 2-dim surface to a ball conformally. 
+![](https://www.youtube.com/watch?v=EH7h7xJbSqo)
 
-
-* 2-Conformal Mapping.
+** 2-Conformal Mapping.
 
 * Windows
 
@@ -82,3 +90,10 @@ in `build` directory,
 ```
 
 it's a conformal mapping, which maps a closed 2-dim surface to a ball conformally. 
+![](https://www.youtube.com/watch?v=DXdiTTghm_0)
+This repository is based on libigl-1.2 and openmesh-8.0. If you want learn more about them, please see here.
+
+`https://github.com/libigl/libigl`
+
+`https://www.graphics.rwth-aachen.de/software/openmesh/` 
+ 
