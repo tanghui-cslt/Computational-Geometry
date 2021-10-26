@@ -56,7 +56,7 @@ Notice: I just compile it on wsl2 (ubuntu 18.04) successfully, and I think it wo
 
 ## Example
 
-** 1-Conformal Mapping.
+### 1-Conformal Mapping.
 
 * Windows
 
@@ -74,7 +74,7 @@ in `build` directory,
 it's a conformal mapping, which maps a closed 2-dim surface to a ball conformally. 
 ![](https://www.youtube.com/watch?v=EH7h7xJbSqo)
 
-** 2-Conformal Mapping.
+### 2-Conformal Mapping.
 
 * Windows
 
