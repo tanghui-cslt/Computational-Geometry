@@ -89,9 +89,9 @@ in `build` directory,
 ./2-Harmonic-1-form
 ```
 
-it's a conformal mapping, which maps a closed 2-dim surface to a ball conformally. 
+This is to find a harmonic 1 form on 2-dim surface.
 
-![](https://www.youtube.com/watch?v=DXdiTTghm_0)
+[![Watch the video](https://img.youtube.com/vi/DXdiTTghm_0/maxresdefault.jpg)](https://www.youtube.com/watch?v=DXdiTTghm_0)
 
 This repository is based on libigl-1.2 and openmesh-8.0. If you want learn more about them, please see here.
 
