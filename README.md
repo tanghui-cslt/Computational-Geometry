@@ -21,7 +21,7 @@ cd build
 cmake -DCMAKE_BUILD_TYPE=Release -G "Visual Studio 15 2017 Win64" ../
 ```
 
-It work on my computer(vs 2017)
+It works on Visual Studio 2017
 
 Notice: libigl only supports the Microsoft Visual Studio 2015 compiler and higher version, in 64bit mode. It will not work with a 32bit build and  older versions of visual studio.
 
