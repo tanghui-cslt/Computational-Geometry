@@ -73,7 +73,12 @@ In `build` directory,
 ```
 
 It's a conformal mapping, which maps a closed 2-dim surface to a ball conformally. Below is vedio.
+
+
 [![Watch the video](https://img.youtube.com/vi/EH7h7xJbSqo/maxresdefault.jpg)](https://www.youtube.com/watch?v=EH7h7xJbSqo)
+
+
+X. Gu, Y. Wang, T. Chan, P.M. Thompson, and S.-T. Yau. Genus zero surface conformal mapping and its application to brain surface mapping. In Information Processing in Medical Imaging, pages 172– 184, Ambleside, UK, July 2003
 
 ### 2-Harmonic-1-form.
 
@@ -93,6 +98,9 @@ In `build` directory,
 This is to find a harmonic 1 form on 2-dim surface. Below is vedio.
 
 [![Watch the video](https://img.youtube.com/vi/DXdiTTghm_0/maxresdefault.jpg)](https://www.youtube.com/watch?v=DXdiTTghm_0)
+
+X. Gu and S.-T Yau. Global conformal surface parameterization. In
+ACM Symposium on Geometry Processing, pages 127–137, 2003.
 
 This repository is based on libigl-1.2 and openmesh-8.0. If you want to learn more about them, please see attach link below:
 
