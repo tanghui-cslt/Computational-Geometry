@@ -11,8 +11,7 @@ git clone --recursive https://github.com/tanghui-cslt/Computational-Geometry.git
 The core libigl functionality only depends on the C++ Standard Library and
 Eigen.
 
-To build all the examples in the tutorial, you can use the CMakeLists.txt in
-the tutorial folder:
+To build all the examples in the tutorial, you can use the CMakeLists.txt in the tutorial folder:
 
 
 ```bash
@@ -43,7 +42,7 @@ sudo apt-get install libxmu-dev
 sudo apt-get install libblas-dev
 ```
 
-and then 
+,then 
 
 ```bash
 cd tutorial
@@ -67,31 +66,31 @@ You should set 1-Conformal_Mapping as Startup project firstly, then run it.
 
 * Linux 
 
-in `build` directory, 
+In `build` directory, 
 
 ```bash
 ./1-Conformal_Mapping
 ```
 
-it's a conformal mapping, which maps a closed 2-dim surface to a ball conformally. 
+It's a conformal mapping, which maps a closed 2-dim surface to a ball conformally. Below is vedio.
 [![Watch the video](https://img.youtube.com/vi/EH7h7xJbSqo/maxresdefault.jpg)](https://www.youtube.com/watch?v=EH7h7xJbSqo)
 
-### 2-Conformal Mapping.
+### 2-Harmonic-1-form.
 
 * Windows
 
-you should set 2-Harmonic-1-form as Startup project firstly,  then run it.
+You should set 2-Harmonic-1-form as Startup project firstly,  then run it.
 
 
 * Linux 
 
-in `build` directory, 
+In `build` directory, 
 
 ```bash
 ./2-Harmonic-1-form
 ```
 
-This is to find a harmonic 1 form on 2-dim surface.
+This is to find a harmonic 1 form on 2-dim surface. Below is vedio.
 
 [![Watch the video](https://img.youtube.com/vi/DXdiTTghm_0/maxresdefault.jpg)](https://www.youtube.com/watch?v=DXdiTTghm_0)
 
