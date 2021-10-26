@@ -13,7 +13,7 @@ Eigen.
 
 To build all the examples in the tutorial, you can use the CMakeLists.txt in
 the tutorial folder:
-On my computer(vs 2017)
+
 
 ```bash
 cd tutorial
@@ -22,8 +22,9 @@ cd build
 cmake -DCMAKE_BUILD_TYPE=Release -G "Visual Studio 15 2017 Win64" ../
 ```
 
+It work on my computer(vs 2017)
 
-Notice: libigl only supports the Microsoft Visual Studio 2015 compiler and later, in 64bit mode. It will not work with a 32bit build and it will not work with older versions of visual studio.
+Notice: libigl only supports the Microsoft Visual Studio 2015 compiler and higher version, in 64bit mode. It will not work with a 32bit build and  older versions of visual studio.
 
 
 * Linux
@@ -52,7 +53,7 @@ cmake -DCMAKE_BUILD_TYPE=Release  ../
 make -j8
 ```
 
-Notice: I just compile it on wsl2 (ubuntu 18.04) successfully, and I think it will works on linux as well.
+Notice: I just compile it on wsl2 (ubuntu 18.04) successfully,  I think it will work on linux as well.
 
 ## Example
 
@@ -60,7 +61,8 @@ Notice: I just compile it on wsl2 (ubuntu 18.04) successfully, and I think it wi
 
 * Windows
 
-you should set 1-Conformal_Mapping as Starup project firstly, and then run it.
+You should set 1-Conformal_Mapping as Startup project firstly, then run it.
+
 ![](./setting-1.png)
 
 * Linux 
@@ -78,7 +80,7 @@ it's a conformal mapping, which maps a closed 2-dim surface to a ball conformall
 
 * Windows
 
-you should set 2-Harmonic-1-form as Starup project firstly, and then run it.
+you should set 2-Harmonic-1-form as Startup project firstly,  then run it.
 
 
 * Linux 
@@ -93,7 +95,7 @@ This is to find a harmonic 1 form on 2-dim surface.
 
 [![Watch the video](https://img.youtube.com/vi/DXdiTTghm_0/maxresdefault.jpg)](https://www.youtube.com/watch?v=DXdiTTghm_0)
 
-This repository is based on libigl-1.2 and openmesh-8.0. If you want learn more about them, please see here.
+This repository is based on libigl-1.2 and openmesh-8.0. If you want to learn more about them, please see attach link below:
 
 `https://github.com/libigl/libigl`
 
