@@ -72,7 +72,7 @@ in `build` directory,
 ```
 
 it's a conformal mapping, which maps a closed 2-dim surface to a ball conformally. 
-[![Watch the video](https://img.youtube.com/vi/<EH7h7xJbSqo>/maxresdefault.jpg)](https://www.youtube.com/watch?v=EH7h7xJbSqo)
+[![Watch the video](https://img.youtube.com/vi/EH7h7xJbSqo/maxresdefault.jpg)](https://www.youtube.com/watch?v=EH7h7xJbSqo)
 
 ### 2-Conformal Mapping.
 
