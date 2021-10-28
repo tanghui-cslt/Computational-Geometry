@@ -86,7 +86,7 @@ bool init_new_window(igl::viewer::Viewer &viewer)
 
 	viewer.ngui->addWindow(Eigen::Vector2i(300, 10), "Harmanic 1 form");
 	//viewer.ngui->addButton("lv rou huo shao", [&]() {touch_flag = !touch_flag; });
-	viewer.ngui->addButton("calc homology group generators ", [&]() {
+	viewer.ngui->addButton("calc homology group's basis ", [&]() {
 		libigl_touch_fire(mesh, viewer, Q_Fh, Mesh_Color);
 		int value = libigl_show_lines(mesh, viewer);
 		while (value != 0)
@@ -182,7 +182,7 @@ bool pre_draw(igl::viewer::Viewer &viewer)
 					if (open_close_flag)
 					{
 						find_loop_flag = false;
-						cout << "find all loop!!\n";
+						cout << "find all loops!!\n";
 					}
 					else {
 						open_close_flag = find_loop(mesh, id);

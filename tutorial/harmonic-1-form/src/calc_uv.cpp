@@ -185,13 +185,9 @@ void uv_splice_loop(MyMesh *mesh, igl::viewer::Viewer &viewer)
 			mesh->edge_handle(temp_half_0) != next_eh)
 		{
 			auto v0 = mesh->to_vertex_handle(temp_half_0);				//保存边界
-			/*if (v0.idx() == 1700)
-			{
-				cout << " num 0 halfedge of 1700 ori=" << v0.idx() << " ori = " << ori_id << endl;
-			}*/
+		
 
-			if (//mesh->data(v0).get_boundary() == 0 ||
-				is_vertex_exist(v0, mesh, vector_loop))
+			if (is_vertex_exist(v0, mesh, vector_loop))
 			{
 				//cout << "!!!!!!!!!!!!\n";
 			}
@@ -294,10 +290,7 @@ void uv_build_matrix_first_field(MyMesh *mesh, igl::viewer::Viewer &viewer)
 				else {// 测试有一部分为0， 一部分为1的情况
 					test_0++;
 				}
-				/*if (test_1 * test_0 != 0)
-				{
-					cout << "id = " << id << "  1-ring the number of zero =" << test_a << " 1=" << test_1 << " 0 =" << test_0 << endl;
-				}*/
+			
 			}
 			else
 			{
@@ -400,20 +393,7 @@ static void traveal_mesh_uv(MyMesh *mesh, int id = 0)
 			}
 			if (id == 0)
 			{
-				//double u = mesh->data(another_v).get_u();
-				//int boundary = mesh->data(v_h).get_boundary();
-				//bool boundary_flag = is_vertex_exist(another_v, mesh, vector_loop);
-				//
-				//if (boundary == 1 && boundary_flag)
-				//{
-				//	//cout << " u=" << u << " ";
-				//	
-				//}
-				//
-				//else
-				//{
-				//	mesh->data(another_v).set_u(temp_edge_value);
-				//}
+				
 				mesh->data(another_v).set_u(temp_edge_value);
 				uv.row(another_id) << temp_edge_value, 0;
 				//ver_u.push_back(temp_edge_value);
@@ -487,27 +467,27 @@ static void calc_w(MyMesh *mesh)
 			characteristic_w(edge_id) = value_to - value_from;
 	}
 
-	for (auto fi = mesh->faces_begin(); fi != mesh->faces_end(); fi++)
-	{
-		double sum = 0;
-		for (auto fh = mesh->fh_begin(*fi); fh != mesh->fh_end(*fi); fh++)
-		{
-			auto eh = mesh->edge_handle(*fh);
-			auto half_e = mesh->halfedge_handle(eh, 0);
-			int  id = eh.idx();
-			double temp = characteristic_w(id);
-			if (half_e != *fh)
-			{
-				temp = (-1)*temp;
-			}
-			sum += temp;
-		}
-		if (fabs(sum) > 1e-4)
-		{
-			getchar();
-		}
+	//for (auto fi = mesh->faces_begin(); fi != mesh->faces_end(); fi++)
+	//{
+	//	double sum = 0;
+	//	for (auto fh = mesh->fh_begin(*fi); fh != mesh->fh_end(*fi); fh++)
+	//	{
+	//		auto eh = mesh->edge_handle(*fh);
+	//		auto half_e = mesh->halfedge_handle(eh, 0);
+	//		int  id = eh.idx();
+	//		double temp = characteristic_w(id);
+	//		if (half_e != *fh)
+	//		{
+	//			temp = (-1)*temp;
+	//		}
+	//		sum += temp;
+	//	}
+	//	if (fabs(sum) > 1e-4)
+	//	{
+	//		getchar();
+	//	}
 
-	}
+	//}
 }
 void calc_u(MyMesh *mesh)
 {
@@ -523,44 +503,11 @@ void calc_u(MyMesh *mesh)
 		mesh->data(*eh).set_w(temp);
 	}
 	all_edge_u.push_back(u);				//所有的u的值
-	//static int a = 0;
-	//for (auto fi = mesh->faces_begin(); fi != mesh->faces_end(); fi++)
-	//{
-	//	a++;
-	//	double sum = 0;
-	//	for (auto fh = mesh->fh_begin(*fi); fh != mesh->fh_end(*fi); fh++)
-	//	{
-	//		auto eh = mesh->edge_handle(*fh);
-	//		auto half_e = mesh->halfedge_handle(eh, 0);
-	//		int  id = eh.idx();
-	//		double temp = mesh->data(eh).get_w();
-	//		if (half_e != *fh)
-	//		{
-	//			temp = (-1)*temp;
-	//		}
-	//		sum += temp;
-	//	}
-	//	//cout << sum << " ";
-	//	if (fabs(sum) > 1e-4)
-	//	{
-	//		getchar();
-	//	}
 
-	//}
 	traveal_mesh_uv(mesh);
 
 
-	/*min_u = 0;
-	max_u = 0;
-	for (auto iv = mesh->vertices_begin(); iv != mesh->vertices_end(); ++iv)
-	{
-		int v_id = iv->idx();
-		double value = mesh->data(*iv).get_u();
-		if (value > max_u)	max_u = value;
-		if (value < min_u)	min_u = value;
 
-	}*/
-	//cout << "min " << min_u << " max = " << max_u << "\n";
 
 }
 
@@ -642,7 +589,7 @@ void calc_edge_v(MyMesh *mesh, Eigen::MatrixXd star_w)
 		auto v_from = mesh->from_vertex_handle(halfEdge0);
 		auto point = mesh->point(v_to) - mesh->point(v_from);
 
-		Eigen::Vector3d edge_point(point[0], point[1], point[3]);
+		Eigen::Vector3d edge_point(point[0], point[1], point[2]);
 
 		double temp = star_w.row(idFace0).dot(edge_point) + star_w.row(idFace1).dot(edge_point);
 		v.push_back(temp / 2.0);
@@ -651,23 +598,7 @@ void calc_edge_v(MyMesh *mesh, Eigen::MatrixXd star_w)
 	}
 	all_edge_v.push_back(v);			//所有的v
 }
-void optimized_v(MyMesh *mesh, Eigen::MatrixXd N_faces, Eigen::MatrixXd star_w)
-{
-	cout << loop_size << " ";
 
-	Eigen::MatrixXd A(loop_size, loop_size);
-	for (size_t i = 0; i < loop_size; i++)
-	{
-		for (size_t j = i; j < loop_size; j++)
-		{
-			double s = 0;
-			for (auto fi = mesh->faces_begin(); fi != mesh->faces_end(); ++fi)
-			{
-
-			}
-		}
-	}
-}
 void calc_v(igl::viewer::Viewer & viewer, MyMesh *mesh)
 {
 	//Eigen::MatrixXd N_faces;
@@ -683,16 +614,7 @@ void calc_v(igl::viewer::Viewer & viewer, MyMesh *mesh)
 	//optimized_v(mesh, N_faces, star_w);
 
 	traveal_mesh_uv(mesh, 1);
-	double min_v = 0;
-	double max_v = 0;
-	for (auto iv = mesh->vertices_begin(); iv != mesh->vertices_end(); ++iv)
-	{
-		int v_id = iv->idx();
-		double value = mesh->data(*iv).get_v();
-		if (value > max_v)	max_v = value;
-		if (value < min_v)	min_v = value;
-
-	}
+	
 	//cout << "minv " << min_v << " maxv = " << max_v << "\n";
 }
 Eigen::VectorXd normalized_vec(Eigen::VectorXd temp_vec)
@@ -767,18 +689,7 @@ void init(MyMesh *mesh, int id, igl::viewer::Viewer &viewer, string uv_sym)
 	//optimized_v(mesh, N_faces, star_w);
 	Eigen::Matrix<unsigned char, Eigen::Dynamic, Eigen::Dynamic> R, G, B, A;
 	bool flag = igl::png::readPNG(TUTORIAL_SHARED_PATH "/checker_512.png", R, G, B, A);
-	/*Eigen::VectorXd temp_u = uv.col(0);
-	Eigen::VectorXd temp_v = normalized_vec(temp_u);
-	uv.col(0) = temp_v;
 
-	temp_u = uv.col(1);
-	temp_v = normalized_vec(temp_u);*/
-	//uv.col(1) = temp_v;
-	/*for (int i = 0; i < temp_v.size(); i++)
-	{
-		double temp_a = temp_v[i];
-		if (temp_a > 1 || temp_a < 0)	cout << " value = " << temp_a;
-	}*/
 	set_id_uv(id, uv_sym);
 	viewer.data.set_uv(uv);
 	//Draw checkerboard texture
