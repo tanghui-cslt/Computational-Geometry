@@ -75,7 +75,7 @@ In `build` directory,
 It's a conformal mapping, which maps a closed 2-dim surface to a ball conformally. Below is vedio.
 
 
-[![Watch the video](https://img.youtube.com/vi/EH7h7xJbSqo/maxresdefault.jpg)](https://www.youtube.com/watch?v=EH7h7xJbSqo)
+[![Watch the video](conformal.png)](https://www.youtube.com/watch?v=EH7h7xJbSqo)
 
 
 ### 2-Harmonic-1-form.
