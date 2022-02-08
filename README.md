@@ -72,7 +72,7 @@ In `build` directory,
 ./1-Conformal_Mapping
 ```
 
-It's a conformal mapping, which maps a closed 2-dim surface to a ball conformally. **Below is a vedio**.
+It's a conformal mapping, which maps a closed 2-dim surface to a ball conformally. ***Below is a vedio***.
 
 
 [![Watch the video](conformal.png)](https://www.youtube.com/watch?v=EH7h7xJbSqo)
