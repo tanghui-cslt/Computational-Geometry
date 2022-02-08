@@ -52,7 +52,7 @@ cmake -DCMAKE_BUILD_TYPE=Release  ../
 make -j8
 ```
 
-Notice: I just compile it on wsl2 (ubuntu 18.04) successfully,  I think it will work on linux as well.
+Notice: I just compiled it on WSL2 (Windows Subsystem for Linux), ubuntu 18.04, successfully,  I think it will work on linux as well.
 
 ## Example
 
