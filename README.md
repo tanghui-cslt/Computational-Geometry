@@ -1,7 +1,7 @@
 
 ## Get started with:
 
-** Downloading repository
+### Downloading repository
 ```bash
 git clone --recursive https://github.com/tanghui-cslt/Computational-Geometry.git
 ```
