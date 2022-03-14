@@ -1,15 +1,15 @@
 #include "closed_loop.h"
-#include "libigl_show_line.h"
-
+#include "LibiglShowLines.h"
+#include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
 using namespace std;
 
-static vector<EdgeHandle> vector_tree_eh;				//×îĞ¡Éú³ÉÊ÷µÄÂ·¾¶
-static vector<EdgeHandle> vector_all_eh;				//ËùÓĞµÄÂ·¾¶ »òÕß ËùÓĞµÄÂ·¾¶ - ×îĞ¡Éú³ÉÊ÷µÄÂ·¾¶
-static vector<EdgeHandle> vector_false_eh;				//ÉÏÒ»´Î±ê¼ÇÎªfalseµÄÂ·¾¶
-static vector< vector<EdgeHandle> > vector_all_loop;		//ËùÓĞloopµÄÂ·¾¶
+vector<EdgeHandle> vector_tree_eh;				//×îĞ¡Éú³ÉÊ÷µÄÂ·¾¶
+vector<EdgeHandle> vector_all_eh;				//ËùÓĞµÄÂ·¾¶ »òÕß ËùÓĞµÄÂ·¾¶ - ×îĞ¡Éú³ÉÊ÷µÄÂ·¾¶
+vector<EdgeHandle> vector_false_eh;				//ÉÏÒ»´Î±ê¼ÇÎªfalseµÄÂ·¾¶
+vector< vector<EdgeHandle> > vector_all_loop;		//ËùÓĞloopµÄÂ·¾¶
 
-
-void set_mesh_true(MyMesh *mesh)				//ÉÏÒ»´Î±»±ê¼ÇÎªtrue£¬ ±ê¼ÇÎªfalse£»
+template <typename TMesh>
+void set_mesh_true(TMesh *mesh)				//ÉÏÒ»´Î±»±ê¼ÇÎªtrue£¬ ±ê¼ÇÎªfalse£»
 {
 	for (auto eh = mesh->edges_begin(); eh != mesh->edges_end(); ++eh)
 	{
@@ -17,14 +17,14 @@ void set_mesh_true(MyMesh *mesh)				//ÉÏÒ»´Î±»±ê¼ÇÎªtrue£¬ ±ê¼ÇÎªfalse£»
 	}
 }
 
-void set_loop_true(MyMesh *mesh)						//Õû¸ömesh±ê¼ÇÎªtrue
+template <typename TMesh>  void set_loop_true(TMesh *mesh)						//Õû¸ömesh±ê¼ÇÎªtrue
 {
 	for (auto vc_it = vector_false_eh.cbegin(); vc_it != vector_false_eh.cend(); vc_it++)
 	{
 		mesh->data(*vc_it).set_labeled(true);
 	}
 }
-bool is_closed(MyMesh *mesh, EdgeHandle eh, int edge_id) //ÅĞ¶ÏÊÇ·ñĞÎ³ÉÁËÒ»¸ö»·
+template <typename TMesh> bool is_closed(TMesh *mesh, EdgeHandle eh, int edge_id) //ÅĞ¶ÏÊÇ·ñĞÎ³ÉÁËÒ»¸ö»·
 {
 	bool closed_flag = false;
 	int times = 0, flag1 = 0, flag2 = 0;
@@ -47,7 +47,7 @@ bool is_closed(MyMesh *mesh, EdgeHandle eh, int edge_id) //ÅĞ¶ÏÊÇ·ñĞÎ³ÉÁËÒ»¸ö»·
 		}
 	}
 
-	assert(times < 3);
+	//assert(times < 3);
 
 	if (times == 2)
 	{
@@ -56,7 +56,7 @@ bool is_closed(MyMesh *mesh, EdgeHandle eh, int edge_id) //ÅĞ¶ÏÊÇ·ñĞÎ³ÉÁËÒ»¸ö»·
 	return closed_flag;
 }
 
-void find_path(MyMesh *mesh, EdgeHandle eh, int last_id, int edge_id)//µİ¹éÕÒ×îĞ¡Éú³ÉÊ÷µÄÂ·¾¶
+template <typename TMesh> void find_path(TMesh *mesh, EdgeHandle eh, int last_id, int edge_id)//µİ¹éÕÒ×îĞ¡Éú³ÉÊ÷µÄÂ·¾¶
 {
 
 	mesh->data(eh).set_labeled(true);				//½«meshÉÏµÄ¸Ã±ßÈ¥µô
@@ -89,7 +89,7 @@ void find_path(MyMesh *mesh, EdgeHandle eh, int last_id, int edge_id)//µİ¹éÕÒ×îĞ
 		}
 	}
 }
-void spanning_tree(MyMesh *mesh) // Éú³É×îĞ¡Éú³ÉÊ÷
+template <typename TMesh> void spanning_tree(TMesh *mesh) // Éú³É×îĞ¡Éú³ÉÊ÷
 {
 	int i = 0;
 	int edge_id = 0;
@@ -111,9 +111,9 @@ void spanning_tree(MyMesh *mesh) // Éú³É×îĞ¡Éú³ÉÊ÷
 
 
 
-bool find_loop(MyMesh *mesh, int &id)		//ÕÒµ½ËùÓĞµÄ»·Â·¡£´ÓÖĞ¿ÉÒÔÌáÈ¡³öloop¡£
+template <typename TMesh> bool find_loop(TMesh *mesh, int &id)		//ÕÒµ½ËùÓĞµÄ»·Â·¡£´ÓÖĞ¿ÉÒÔÌáÈ¡³öloop¡£
 {
-	assert(id < vector_all_eh.size());
+	//assert(id < vector_all_eh.size());
 
 	set_loop_true(mesh);
 
@@ -134,14 +134,13 @@ bool find_loop(MyMesh *mesh, int &id)		//ÕÒµ½ËùÓĞµÄ»·Â·¡£´ÓÖĞ¿ÉÒÔÌáÈ¡³öloop¡£
 	return false;
 }
 
-void set_loop_flag(MyMesh *mesh, int &id)		//±ê¼Çµ±Ç°Â·¾¶
+template <typename TMesh> void set_loop_flag(TMesh *mesh, int &id)		//±ê¼Çµ±Ç°Â·¾¶
 {
 	set_loop_true(mesh);
 	int size = (int)vector_all_eh.size();
-	assert(size > 0);
+	//assert(size > 0);
 	id = id % vector_all_eh.size();
 
-	//cout << "µÚ" << id << "¸ö»· " << endl;
 
 	for (auto v_it = vector_all_loop[id].begin(); v_it != vector_all_loop[id].end(); v_it++)
 	{
@@ -152,7 +151,7 @@ void set_loop_flag(MyMesh *mesh, int &id)		//±ê¼Çµ±Ç°Â·¾¶
 
 }
 
-void save_false_flag(MyMesh *mesh)
+template <typename TMesh> void save_false_flag(TMesh *mesh)
 {
 	vector<EdgeHandle> single_loop;
 	for (auto v_it = vector_false_eh.begin(); v_it != vector_false_eh.end(); v_it++)
@@ -187,8 +186,7 @@ void save_false_flag(MyMesh *mesh)
 				|| v2 == temp_v1 || v2 == temp_v2)
 			{
 				loop.push_back(ie);
-				//std::cout << v1.idx() << " " << v2.idx() << "->";
-				//cout << ie.idx() << " ->" ;
+				
 				single_loop.erase(iv);
 				break;
 			}
@@ -201,11 +199,9 @@ void save_false_flag(MyMesh *mesh)
 	auto v2 = mesh->from_vertex_handle(half_e);
 	//std::cout << v1.idx() << " " << v2.idx() ;
 	vector_all_loop.push_back(loop);
-
-	//cout << "\nµ±Ç°ÕÒµ½µÄÂ·¾¶ÊıÄ¿£º " << vector_all_loop.size()<<" ³¤¶ÈÎª="<<len << endl;
 }
 
-vector< vector<EdgeHandle> > get_loop()
+template <typename TMesh>  vector< vector<EdgeHandle> > get_loop()
 {
 	return vector_all_loop;
 }

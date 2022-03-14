@@ -64,7 +64,10 @@ struct MyTraits :public OpenMesh::DefaultTraits
 		void set_boundary(const int &value) { boundary = value; }
 		const int get_boundary() { return boundary; }
 
-		void set_boundary(const int &value, const int &id) { vec_boundary.push_back(value); vec_b_id.push_back(id); }
+		void set_boundary(const int &value, const int &id) 
+		{
+			vec_boundary.push_back(value); vec_b_id.push_back(id); boundary = value;
+		}
 		const int get_boundary(const int & id) 
 		{
 			for (int i = 0; i < vec_b_id.size();i++)
@@ -75,6 +78,10 @@ struct MyTraits :public OpenMesh::DefaultTraits
 				}
 			}
 			return -1; 
+		}
+		std::vector<int> get_boundary_id()
+		{
+			return vec_boundary;
 		}
 		const void set_boundary_clear() { vec_boundary.clear(); vec_b_id.clear(); }
 	};

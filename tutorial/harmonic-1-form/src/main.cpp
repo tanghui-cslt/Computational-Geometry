@@ -3,35 +3,36 @@
 #include <igl/viewer/Viewer.h>
 #include <nanogui/formhelper.h>
 #include <nanogui/screen.h>
-#include "convert_to_libigl.h"
+#include "MeshViewer.h"
 #include "openmesh_traits.h"
+#include "HarmonicForm.h"
 
 using namespace std;
 using namespace igl;
+using namespace OpenMesh;
+typedef OpenMesh::TriMesh_ArrayKernelT<MyTraits> MyMesh;
 
 int main()
 {
 	MyMesh mesh;
+
 	OpenMesh::IO::Options opt;
 	
 	//const char* filename = "torus_cut_graph.obj";
-	//const char* filename = TUTORIAL_SHARED_PATH "/3holes.off";
-	const char* filename = TUTORIAL_SHARED_PATH "/2-torus.obj";
+	//const char* filename = TUTORIAL_SHARED_PATH "/2-torus.obj";
+	const char* filename = TUTORIAL_SHARED_PATH "/torus_cut_graph.obj";
 	if (!OpenMesh::IO::read_mesh(mesh, filename, opt))
 	{
 		cerr << "Error: Cannot read mesh from " << filename << endl;
 		
 	}
-	//if (!OpenMesh::IO::read_mesh(mesh, filename, opt))
-	//{
-	//	cerr << "Error: Cannot read mesh from " << filename << endl;
 
-	//}
 	igl::viewer::Viewer viewer;
-	convert_libigl(mesh,viewer);
+	convert_libigl<MyMesh>(mesh,viewer);
 	
-	init(mesh);
+	init<MyMesh>(mesh);
 	
+
 	viewer.callback_init = &init_new_window;
 	viewer.callback_pre_draw = &pre_draw;
 	viewer.core.is_animating = true;
