@@ -14,8 +14,8 @@
 #include <iostream>
 #include <igl/per_face_normals.h>
 #include <OpenMesh/Core/IO/MeshIO.hh>
-#include "closed_loop.h"
-#include <fstream>
+#include "FindClosedLoop.h"
+
 using namespace std;
 using namespace Eigen;
 

@@ -10,7 +10,7 @@
 #include <queue>
 
 #include "LibiglShowLines.h"
-#include "closed_loop.h"
+#include "FindClosedLoop.h"
 #include "HarmonicForm.h"
 
 
