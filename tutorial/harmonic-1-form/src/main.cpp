@@ -5,12 +5,12 @@
 #include <nanogui/screen.h>
 #include "MeshViewer.h"
 #include "openmesh_traits.h"
-#include "HarmonicForm.h"
+#include <HarmonicForm.h>
 
 using namespace std;
 using namespace igl;
 using namespace OpenMesh;
-typedef OpenMesh::TriMesh_ArrayKernelT<MyTraits> MyMesh;
+using MyMesh= OpenMesh::TriMesh_ArrayKernelT<MyTraits> ;
 
 int main()
 {

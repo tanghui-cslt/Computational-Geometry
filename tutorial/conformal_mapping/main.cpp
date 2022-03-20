@@ -7,9 +7,9 @@
 #include <igl/per_vertex_normals.h>
 #include <igl/read_triangle_mesh.h>
 #include <iostream>
-#include <nanogui/formhelper.h>//增加界面
-#include <nanogui/screen.h>//增加界面
-#include <fstream>
+#include <nanogui/formhelper.h> 
+#include <nanogui/screen.h>		
+
 #include <time.h>
 
 using namespace std;
@@ -17,27 +17,27 @@ using namespace Eigen;
 
 Eigen::MatrixXd V;
 Eigen::MatrixXi F;
-//Eigen::MatrixXd V1;
-//Eigen::MatrixXi F1;
-Eigen::MatrixXd Laplacian_matrix;						//拉普拉斯算子向量矩阵
-Eigen::MatrixXd N_vertices;								//点法向量矩阵
-SparseMatrix<double> L;									//cot值的矩阵
+
+Eigen::MatrixXd Laplacian_matrix;						
+Eigen::MatrixXd N_vertices;								
+SparseMatrix<double> L;									//cot Matrix
 
 bool stop_flag = true;
-double energy_init = 0;									//定义初始能量， 
-double energy_times_i = 0;								//第i次迭代能量，
-double energy_times_i1 = 0;								//第i+1次能量
+double energy_init = 0;								
+double energy_times_i = 0;							
+double energy_times_i1 = 0;							
 
 bool show_gauss = false;
-void calc_laplacian();									//计算初始的能量和拉普拉斯算子矩阵
+void calc_laplacian();								
 
-double  step_size = 0.1;								//步长
-double threshold_value = 1e-5;							//阈值
+double  step_size = 0.1;							
+double threshold_value = 1e-5;						
 bool boolVariable = true;
-static int times = 0;									//运行次数
-ofstream out;											//写入文件信息
-clock_t start, finish;									//计算运行时间
+static int times = 0;								
+									
+clock_t start, finish;								
 double totaltime;
+
 bool GUI(igl::viewer::Viewer &viewer)
 {
 
@@ -60,35 +60,7 @@ bool GUI(igl::viewer::Viewer &viewer)
 		viewer.core.is_animating = false;
 	});
 
-	//viewer.ngui->addButton("iteration 1 times", [&]() {
-	//	times++;
-	//	calc_laplacian();
-	//	viewer.data.clear();
-	//	viewer.data.set_mesh(N_vertices, F);
-	//	viewer.core.align_camera_center(N_vertices, F);
-	//	cout << " times = " << times << endl;
-	//	finish = clock();
-	//	totaltime = (double)(finish - start) / CLOCKS_PER_SEC;
-	////	out << "times =" << times << "\tenergy = " << energy_times_i1 << "\trun time = " << totaltime << "s" << endl;
-	//});
-
-	/*viewer.ngui->addButton("iteration 10 times", [&]() {
-		for (int i = 0; i< 10; i++)
-		{
-			times++;
-			calc_laplacian();
-			viewer.data.clear();
-			viewer.data.set_mesh(N_vertices, F);
-			viewer.core.align_camera_center(N_vertices, F);
-			cout << " times = " << times << endl;
-			finish = clock();
-			totaltime = (double)(finish - start) / CLOCKS_PER_SEC;
-			out << "times =" << times << "\tenergy = " << energy_times_i1 << "\trun time = " << totaltime << "s" << endl;
-		}
-
-
-	});*/
-
+	
 	viewer.ngui->setLabelFontSize(20);
 	viewer.ngui->addVariable("step size :", step_size);
 	viewer.ngui->addVariable("threshold value:", threshold_value);
@@ -133,15 +105,13 @@ bool pre_draw(igl::viewer::Viewer & viewer)
 			double diff_e = energy_times_i - energy_times_i1;
 			if (fabs(diff_e)< 1e-5)
 			{
-				cout << "迭代停止" << endl;
+				cout << "Stop" << endl;
 				stop_flag = false;
 
 
-			}
-			//cout << " times = " << times << endl;
+			}			
 			finish = clock();
 			totaltime = (double)(finish - start) / CLOCKS_PER_SEC;
-			//out << "times =" << times << "\tenergy = " << energy_times_i1 << "\trun time = " << totaltime << "s" << endl;
 		}
 	}
 	//GUI(viewer);
@@ -163,11 +133,7 @@ int main(int argc, char *argv[])
 	//igl::readOFF(filename, V, F);
 	
 	igl::readOBJ(TUTORIAL_SHARED_PATH "/cow.obj", V, F);
-	//igl::writeOBJ("cow.obj", V, F);
 
-	//out.open("info.txt");
-	//igl::readOBJ(filename, V, F);
-	//igl::read_triangle_mesh(filename, V1, F1);
 	// Plot the mesh
 	igl::viewer::Viewer viewer;
 	
@@ -175,8 +141,6 @@ int main(int argc, char *argv[])
 	igl::cotmatrix(V, F, L);
 
 	Laplacian_matrix.resize(V.rows(), 3);
-
-	//igl::viewer::Viewer viewer;
 
 
 	viewer.callback_pre_draw = &pre_draw;
@@ -188,7 +152,7 @@ int main(int argc, char *argv[])
 	viewer.data.set_mesh(V, F);
 	viewer.core.align_camera_center(V, F);
 	viewer.launch();
-	//out.close();
+
 }
 
 
@@ -202,8 +166,7 @@ void calc_laplacian()
 	energy_times_i1 = 0;
 	Vector3d  centroid_vector(0, 0, 0);
 
-	//cout << "zuobiao :="<<sum_x << " " << sum_y << " " << sum_z << endl;
-
+	
 	for (int i = 0; i < row_len; i++)
 	{
 		double sum_energy = 0;
@@ -224,31 +187,26 @@ void calc_laplacian()
 				cot /= 2;
 				Vector3d temp_N_vertices = N_vertices.row(i) - N_vertices.row(j);
 
-				//一个点的周围所有边的权重*向量之和  
-				//即 Laplace 算子
+				//calc Laplacian operator. 
+				
 				Laplacian_matrix(i, 0) += cot * temp_N_vertices(0);
 				Laplacian_matrix(i, 1) += cot * temp_N_vertices(1);
 				Laplacian_matrix(i, 2) += cot * temp_N_vertices(2);
 
-				//在该点的能量之和
+				
 				sum_energy += cot*(temp_N_vertices).dot(temp_N_vertices);
 			}
 		}
-		//Laplacian_matrix.row(i) = Laplacian_matrix.row(i) / Laplacian_matrix.row(i).norm();
-		//计算总能量之和
+	
 		energy_times_i1 += sum_energy;
-		//取出第i行
+		
 
 		Vector3d temp_Laplacian = Laplacian_matrix.row(i);
 		Vector3d temp_N_vertices = N_vertices.row(i);
 
-		//点乘
+		
 		double mod = temp_Laplacian.dot(temp_N_vertices);
-		/*if (fabs(mod) > 1)
-		{
-		cout << "mod:=" << mod << endl;
-		getchar();
-		}*/
+	
 		Vector3d normal_vector = mod*temp_N_vertices;
 		Vector3d tangent_vector;
 
@@ -259,8 +217,6 @@ void calc_laplacian()
 		temp_v(0) = N_vertices(i, 0) - tangent_vector(0)*step_size;
 		temp_v(1) = N_vertices(i, 1) - tangent_vector(1)*step_size;
 		temp_v(2) = N_vertices(i, 2) - tangent_vector(2)*step_size;
-
-
 
 
 
@@ -277,13 +233,7 @@ void calc_laplacian()
 
 		N_vertices.row(i) = temp_v;
 
-
-		//cout << endl;
 	}
-//	std::cout << "energy = " << energy_times_i << "  " << energy_times_i1 << " ";
 
-	//if (times % 20 == 0)
-	//	std::cout << "energy = " << energy_times_i << "  " << energy_times_i1 << " times = " << times << endl;
-	//getchar();
 
 }

@@ -14,7 +14,7 @@
 #include <iostream>
 #include <igl/per_face_normals.h>
 #include <OpenMesh/Core/IO/MeshIO.hh>
-#include "FindClosedLoop.h"
+#include "HomologyGroup.h"
 
 using namespace std;
 using namespace Eigen;
@@ -42,7 +42,7 @@ private:
 	bool curr_label = false;									//label of each edge
 	SparseMatrix<double> d0;									//d0
 	SparseMatrix<double, Eigen::RowMajor> star1;				//*1
-	vector<VertexHandle> vector_labled_boundary;				//当前选中的loop
+	vector<VertexHandle> vector_labled_boundary;				
 	SparseMatrix<double> L;										//L = cotangent
 	VectorXd characteristic_w;									//characteristic 1 form
 	MatrixXd harmonic_w;										//harmonic 1 form
@@ -228,13 +228,13 @@ void HarmonicForm<TMesh>::_find_boundary(TMesh *mesh, int id)
 		auto ori_vh = mesh->to_vertex_handle(temp_half_0);
 		int ori_id = ori_vh.idx();
 
-		temp_half_0 = mesh->next_halfedge_handle(temp_half_0);		//这个半边的下一个半边
+		temp_half_0 = mesh->next_halfedge_handle(temp_half_0);		
 
 		// find the 1-ring of ori_id in ccw rotation 
-		while (mesh->edge_handle(temp_half_0) != pre_eh &&			//判断是否找到边界
+		while (mesh->edge_handle(temp_half_0) != pre_eh &&			
 			mesh->edge_handle(temp_half_0) != next_eh)
 		{
-			auto v0 = mesh->to_vertex_handle(temp_half_0);				//保存边界
+			auto v0 = mesh->to_vertex_handle(temp_half_0);				
 
 
 			if (!_is_boundry_vertex(v0, mesh, vector_loop))
@@ -248,18 +248,18 @@ void HarmonicForm<TMesh>::_find_boundary(TMesh *mesh, int id)
 			temp_half_0 = mesh->next_halfedge_handle(temp_half_0);
 		}
 
-		//1 号半边
+	
 
 		ori_vh = mesh->to_vertex_handle(temp_half_1);
 		ori_id = ori_vh.idx();
 
-		temp_half_1 = mesh->next_halfedge_handle(temp_half_1);		//这个半边的下一个半边
+		temp_half_1 = mesh->next_halfedge_handle(temp_half_1);		
 		VertexHandle v1 = mesh->to_vertex_handle(temp_half_1);
 		// find the 1-ring of ori_id in cw rotation 
-		while (mesh->edge_handle(temp_half_1) != pre_eh &&			//判断是否找到边界
+		while (mesh->edge_handle(temp_half_1) != pre_eh &&			
 			mesh->edge_handle(temp_half_1) != next_eh)
 		{
-			v1 = mesh->to_vertex_handle(temp_half_1);				//保存边界
+			v1 = mesh->to_vertex_handle(temp_half_1);				
 
 
 			if (!_is_boundry_vertex(v1, mesh, vector_loop))
@@ -305,20 +305,23 @@ VectorXd HarmonicForm<TMesh>::_constrained_laplacian_matrix(TMesh *mesh, int id)
 		}
 	}
 	//calc characteristic 1 form, and b 
+	// \delta a = 0
+	//  a at boundary = 0 or 1.
 	for (auto iv = mesh->vertices_begin(); iv != mesh->vertices_end(); ++iv)
 	{
 		if (_is_boundry_vertex(*iv, mesh, vector_loop))	continue;
 		int new_id = mesh->data(*iv).get_new_id();
 		int id = iv->idx();
 		double temp_a = 0;
-		for (auto ve = mesh->vv_begin(*iv); ve != mesh->vv_end(*iv); ++ve)//l-ring 之和为0
+
+		for (auto ve = mesh->vv_begin(*iv); ve != mesh->vv_end(*iv); ++ve) 
 		{
 			auto ano_vh = ve;
 
 			int ano_vid = ano_vh->idx();
 			temp_a = closed_matrix.coeff(iv->idx(), ano_vid);
 			int new_ano_id = mesh->data(*ano_vh).get_new_id();
-			if (_is_boundry_vertex(*ano_vh, mesh, vector_loop))	//1-ring有边界点，根据之前的值，确定边界的情况
+			if (_is_boundry_vertex(*ano_vh, mesh, vector_loop))	
 			{
 				int temp_value = mesh->data(*iv).get_boundary();
 				if (temp_value == 1)
@@ -336,7 +339,7 @@ VectorXd HarmonicForm<TMesh>::_constrained_laplacian_matrix(TMesh *mesh, int id)
 }
 
 template<class TMesh>
-VectorXd HarmonicForm<TMesh>::_solve_0_form(SparseMatrix<double, Eigen::RowMajor> charac_matrix, VectorXd b)				// 求解特征1形式
+VectorXd HarmonicForm<TMesh>::_solve_0_form(SparseMatrix<double, Eigen::RowMajor> charac_matrix, VectorXd b)		
 {
 	VectorXd xyz;
 	Eigen::SimplicialLDLT<Eigen::SparseMatrix<double>>MatricesCholesky(charac_matrix);
@@ -348,7 +351,7 @@ template<class TMesh>
 VectorXd HarmonicForm<TMesh>::_solve_alpha(TMesh *mesh)
 {
 	VectorXd alpha(v_size);
-	//1 
+	// 
 	Eigen::SparseMatrix<double> d0_transpose = d0.transpose();
 	Eigen::VectorXd temp_closed_b = d0_transpose * star1*characteristic_w;
 	Eigen::SparseMatrix<double> la = d0_transpose * star1*d0;
@@ -462,7 +465,7 @@ void HarmonicForm<TMesh>::_calc_closed_1_form(TMesh *mesh, VectorXd xyz)
 		double value_to = f_v(id_to);
 		double value_from = f_v(id_from);
 
-		// 0 左边界 1 右边界 
+		// 0 left 1 right
 		if (_is_boundry_edge(*ei))
 			characteristic_w(edge_id) = 0;
 		else if (boundary_from == 0 && _is_boundry_vertex(v_to, mesh, vector_loop))
@@ -595,7 +598,7 @@ void HarmonicForm<TMesh>::_calc_dual_harmonic_1_form(TMesh *mesh, Eigen::MatrixX
 		mesh->data(*ei).set_v(temp);
 
 	}
-	all_edge_v.push_back(v);			//所有的v
+	all_edge_v.push_back(v);			
 
 }
 

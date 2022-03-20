@@ -1,27 +1,29 @@
 #pragma once
-#ifndef _FIND_CLOSED_LOOP_H_
-#define _FIND_CLOSED_LOOP_H_
+#ifndef _HOMOLOGY_GROUP_
+#define _HOMOLOGY_GROUP_
 
 
 #include <vector>
 #include <iostream>
 #include "openmesh_traits.h"
 using namespace std;
-vector<EdgeHandle> vector_tree_eh;				//最小生成树的路径
-vector<EdgeHandle> vector_all_eh;				//所有的路径 或者 所有的路径 - 最小生成树的路径
-vector<EdgeHandle> vector_false_eh;				//上一次标记为false的路径
-vector< vector<EdgeHandle> > vector_all_loop;		//所有loop的路径
+//spanning tree 
+vector<EdgeHandle> vector_tree_eh;				
+vector<EdgeHandle> vector_all_eh;				
+vector<EdgeHandle> vector_false_eh;		
+//all homology gropy
+vector< vector<EdgeHandle> > vector_all_loop;		
 
 template <typename TMesh>  bool find_loop(TMesh *mesh,int &id);
 template <typename TMesh>  void spanning_tree(TMesh *mesh);
 template <typename TMesh>  void set_mesh_true(TMesh *mesh);
-template <typename TMesh>  void set_loop_flag(TMesh *mesh, int &id);		//标记当前路径
+template <typename TMesh>  void set_loop_flag(TMesh *mesh, int &id);	
 template <typename TMesh>  void save_false_flag(TMesh *mesh);
 template <typename TMesh>  std::vector< std::vector<EdgeHandle> > get_loop();
 
 
 template <typename TMesh>
-void set_mesh_true(TMesh *mesh)				//上一次被标记为true， 标记为false；
+void set_mesh_true(TMesh *mesh)				
 {
 	for (auto eh = mesh->edges_begin(); eh != mesh->edges_end(); ++eh)
 	{
@@ -29,24 +31,26 @@ void set_mesh_true(TMesh *mesh)				//上一次被标记为true， 标记为false；
 	}
 }
 
-template <typename TMesh>  void set_loop_true(TMesh *mesh)						//整个mesh标记为true
+template <typename TMesh>  void set_loop_true(TMesh *mesh)						
 {
 	for (auto vc_it = vector_false_eh.cbegin(); vc_it != vector_false_eh.cend(); vc_it++)
 	{
 		mesh->data(*vc_it).set_labeled(true);
 	}
 }
-template <typename TMesh> bool is_closed(TMesh *mesh, EdgeHandle eh, int edge_id) //判断是否形成了一个环
+
+//judge whether forming a circle
+template <typename TMesh> bool is_closed(TMesh *mesh, EdgeHandle eh) 
 {
 	bool closed_flag = false;
 	int times = 0, flag1 = 0, flag2 = 0;
-	auto v1 = mesh->from_vertex_handle(mesh->halfedge_handle(eh, edge_id));
-	auto v2 = mesh->to_vertex_handle(mesh->halfedge_handle(eh, edge_id));
+	auto v1 = mesh->from_vertex_handle(mesh->halfedge_handle(eh, 0));
+	auto v2 = mesh->to_vertex_handle(mesh->halfedge_handle(eh, 0));
 
 	for (auto vc_it = vector_tree_eh.cbegin(); vc_it != vector_tree_eh.cend(); vc_it++)
 	{
-		auto temp_v1 = mesh->from_vertex_handle(mesh->halfedge_handle(*vc_it, edge_id));
-		auto temp_v2 = mesh->to_vertex_handle(mesh->halfedge_handle(*vc_it, edge_id));
+		auto temp_v1 = mesh->from_vertex_handle(mesh->halfedge_handle(*vc_it, 0));
+		auto temp_v2 = mesh->to_vertex_handle(mesh->halfedge_handle(*vc_it, 0));
 		if ((temp_v1 == v1 || temp_v2 == v1) && flag1 == 0)
 		{
 			times++;
@@ -68,25 +72,26 @@ template <typename TMesh> bool is_closed(TMesh *mesh, EdgeHandle eh, int edge_id
 	return closed_flag;
 }
 
-template <typename TMesh> void find_path(TMesh *mesh, EdgeHandle eh, int last_id, int edge_id)//递归找最小生成树的路径
+//generator spanning tree 
+template <typename TMesh> void find_path(TMesh *mesh, EdgeHandle eh, int last_id)
 {
 
-	mesh->data(eh).set_labeled(true);				//将mesh上的该边去掉
+	mesh->data(eh).set_labeled(true);				
 
-	if (is_closed(mesh, eh, edge_id))
+	if (is_closed(mesh, eh))
 		return;
 
 	std::vector<EdgeHandle>::iterator iter;
 
 	iter = find(vector_all_eh.begin(), vector_all_eh.end(), eh);
-	if (iter != vector_all_eh.end()) {				//在vector中删除该点
+	if (iter != vector_all_eh.end()) {				
 		vector_all_eh.erase(iter);
 	}
 
 
-	vector_tree_eh.push_back(eh);					//压到vector中
-	auto v1 = mesh->to_vertex_handle(mesh->halfedge_handle(eh, edge_id));
-	auto v2 = mesh->from_vertex_handle(mesh->halfedge_handle(eh, edge_id));
+	vector_tree_eh.push_back(eh);					
+	auto v1 = mesh->to_vertex_handle(mesh->halfedge_handle(eh, 0));
+	auto v2 = mesh->from_vertex_handle(mesh->halfedge_handle(eh, 0));
 	//cout << "v1 = " << v1.idx() << "v2 = " << v2.idx() << endl;
 	if (v1.idx() == last_id)
 		v1 = v2;
@@ -96,15 +101,14 @@ template <typename TMesh> void find_path(TMesh *mesh, EdgeHandle eh, int last_id
 		EdgeHandle now_eh = *ve;
 		if (!mesh->data(now_eh).is_labeled())
 		{
-			find_path(mesh, now_eh, v1.idx(), edge_id);
+			find_path(mesh, now_eh, v1.idx());
 
 		}
 	}
 }
-template <typename TMesh> void spanning_tree(TMesh *mesh) // 生成最小生成树
+template <typename TMesh> void spanning_tree(TMesh *mesh) 
 {
-	int i = 0;
-	int edge_id = 0;
+	
 	EdgeHandle eh;
 	for (auto ie = mesh->edges_begin(); ie != mesh->edges_end(); ++ie)
 	{
@@ -117,13 +121,14 @@ template <typename TMesh> void spanning_tree(TMesh *mesh) // 生成最小生成树
 
 	eh = vector_all_eh.front();
 	auto last_id = mesh->to_vertex_handle(mesh->halfedge_handle(eh, 0)).idx();
-	find_path(mesh, eh, last_id, edge_id);
+
+	find_path(mesh, eh, last_id);
 	//min(1, 2);
 }
 
 
-
-template <typename TMesh> bool find_loop(TMesh *mesh, int &id)		//找到所有的环路。从中可以提取出loop。
+//find loop by index.
+template <typename TMesh> bool find_loop(TMesh *mesh, int &id)		
 {
 	//assert(id < vector_all_eh.size());
 
@@ -133,10 +138,10 @@ template <typename TMesh> bool find_loop(TMesh *mesh, int &id)		//找到所有的环路
 	{
 		mesh->data(*ve_it).set_labeled(false);
 	}
-	vector_false_eh.assign(vector_tree_eh.begin(), vector_tree_eh.end());	//复制整个数组
+	vector_false_eh.assign(vector_tree_eh.begin(), vector_tree_eh.end());	
 
 	EdgeHandle eh = vector_all_eh[id];
-	mesh->data(eh).set_labeled(false);		//显示出来
+	mesh->data(eh).set_labeled(false);		
 	vector_false_eh.push_back(eh);
 
 
@@ -146,7 +151,7 @@ template <typename TMesh> bool find_loop(TMesh *mesh, int &id)		//找到所有的环路
 	return false;
 }
 
-template <typename TMesh> void set_loop_flag(TMesh *mesh, int &id)		//标记当前路径
+template <typename TMesh> void set_loop_flag(TMesh *mesh, int &id)		
 {
 	set_loop_true(mesh);
 	int size = (int)vector_all_eh.size();
@@ -159,7 +164,7 @@ template <typename TMesh> void set_loop_flag(TMesh *mesh, int &id)		//标记当前路
 		mesh->data(*v_it).set_labeled(false);
 	}
 
-	vector_false_eh.assign(vector_all_loop[id].begin(), vector_all_loop[id].end());	//复制整个数组
+	vector_false_eh.assign(vector_all_loop[id].begin(), vector_all_loop[id].end());	
 
 }
 
@@ -175,7 +180,7 @@ template <typename TMesh> void save_false_flag(TMesh *mesh)
 	}
 	int len = (int)single_loop.size();
 
-	// vector中存放的边是连续的
+	
 	vector<EdgeHandle> loop;
 	loop.push_back(single_loop[len - 1]);
 	single_loop.pop_back();
@@ -205,11 +210,7 @@ template <typename TMesh> void save_false_flag(TMesh *mesh)
 		}
 
 	}
-	EdgeHandle ve = loop[len - 1];
-	auto half_e = mesh->halfedge_handle(ve, 0);
-	auto v1 = mesh->to_vertex_handle(half_e);
-	auto v2 = mesh->from_vertex_handle(half_e);
-	//std::cout << v1.idx() << " " << v2.idx() ;
+	
 	vector_all_loop.push_back(loop);
 }
 

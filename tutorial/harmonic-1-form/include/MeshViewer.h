@@ -1,6 +1,6 @@
 #pragma once
-#ifndef _Mesh_VIEWER_
-#define _Mesh_VIEWER_
+#ifndef _MESH_VIEWER_
+#define _MESH_VIEWER_
 
 #include <igl/viewer/Viewer.h>
 #include <igl/viewer/Viewer.h>
@@ -10,7 +10,7 @@
 #include <queue>
 
 #include "LibiglShowLines.h"
-#include "FindClosedLoop.h"
+#include "HomologyGroup.h"
 #include "HarmonicForm.h"
 
 
@@ -20,7 +20,7 @@ bool pre_draw(igl::viewer::Viewer &viewer);
 bool init_new_window(igl::viewer::Viewer &viewer);
 
 using namespace std;
-typedef OpenMesh::TriMesh_ArrayKernelT<MyTraits> MyMesh;
+using MyMesh = OpenMesh::TriMesh_ArrayKernelT<MyTraits>;
 Eigen::MatrixXd V;
 Eigen::MatrixXi F;
 HarmonicForm<MyMesh> h_form;
@@ -34,9 +34,9 @@ bool puring_flag = false;
 bool show_loop_flag = false;
 bool calc_uv_flag = false;
 Eigen::MatrixXd face_color;
-bool open_close_flag = false;	//等待循环完成
-int id = 0;						//寻找过程中的路径的变化
-int loop_id = 0;				//输入显示第loop_id个路径
+bool open_close_flag = false;	
+int id = 0;						
+int loop_id = 0;				
 queue<OpenMesh::FaceHandle> Q_Fh;
 
 
@@ -94,19 +94,19 @@ bool init_new_window(igl::viewer::Viewer &viewer)
 {
 
 	viewer.ngui->addWindow(Eigen::Vector2i(300, 10), "Harmanic 1 form");
-	viewer.ngui->addButton("calc homology group's basis ", [&]() {
+	viewer.ngui->addButton("calc homology bases ", [&]() {
 		libigl_touch_fire<MyMesh>(mesh, viewer, Q_Fh, Mesh_Color);
 		int value = libigl_show_lines<MyMesh>(mesh, viewer);
-		while (value != 0)
-		{
-			//cout << "puring ok\n";
-			value = libigl_show_lines<MyMesh>(mesh, viewer);
-		}
+		//while (libigl_show_lines<MyMesh>(mesh, viewer) != 0)
+		//{
+		//	//cout << "puring ok\n";
+		//	//value = libigl_show_lines<MyMesh>(mesh, viewer);
+		//}
 
 
 		puring_flag = false;
 		spanning_tree<MyMesh>(mesh);
-		open_close_flag = find_loop<MyMesh>(mesh, id);		//找第id个loop，并判断是否找完
+		open_close_flag = find_loop<MyMesh>(mesh, id);		// find idth loop
 
 		find_loop_flag = true;
 
@@ -120,7 +120,7 @@ bool init_new_window(igl::viewer::Viewer &viewer)
 	}
 	);
 
-	viewer.ngui->addVariable<int >("show generator:", [&](int val) {
+	viewer.ngui->addVariable<int >("show basis:", [&](int val) {
 		loop_id = val; // set
 		set_loop_flag<MyMesh>(mesh, loop_id);		//标记当前路径
 		show_loop_flag = true;
@@ -177,17 +177,17 @@ bool pre_draw(igl::viewer::Viewer &viewer)
 				//cout << "puring ok\n";
 				puring_flag = false;
 				spanning_tree<MyMesh>(mesh);
-				open_close_flag = find_loop<MyMesh>(mesh, id);		//找第id个loop，并判断是否找完
+				open_close_flag = find_loop<MyMesh>(mesh, id);	
 
 				find_loop_flag = true;
 			}
 		}
-		if (find_loop_flag)		//寻找路径
+		if (find_loop_flag)		
 		{
 			do {
 				if (libigl_lines<MyMesh>(mesh, viewer) == 0)
 				{
-					save_false_flag<MyMesh>(mesh);					//保存找到的loop
+					save_false_flag<MyMesh>(mesh);					//save loops
 
 					if (open_close_flag)
 					{
@@ -209,7 +209,7 @@ bool pre_draw(igl::viewer::Viewer &viewer)
 
 			calc_uv_flag = false;
 		}
-		if (show_loop_flag)		//显示路径
+		if (show_loop_flag)		
 		{
 			if (libigl_temp_show_lines<MyMesh>(mesh, viewer) == 0)
 			{
