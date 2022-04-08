@@ -98,7 +98,7 @@ This is to find a harmonic 1 form on 2-dim surface. ***Below is a vedio***.
 [![Watch the video](./1_form.png)](https://youtu.be/pc_lQX7eLd4)
 
 
-
+[bilibili](https://www.bilibili.com/video/BV1eP4y1K7bW/)
 
 This repository is based on libigl-1.2 and openmesh-8.0. If you want to learn more about them, please see attach link below:
 
