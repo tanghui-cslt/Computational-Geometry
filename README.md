@@ -76,7 +76,7 @@ It's a conformal mapping, which maps a closed 2-dim surface to a ball conformall
 
 
 [![Watch the video](conformal.png)](https://www.youtube.com/watch?v=EH7h7xJbSqo)
-[视频在bilibili](https://www.bilibili.com/video/BV1eP4y1K7bW/)
+[视频在bilibili](https://www.bilibili.com/video/BV1sT4y1v7PY/)
 
 
 ### 2-Harmonic-1-form.
