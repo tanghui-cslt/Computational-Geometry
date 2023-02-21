@@ -76,7 +76,7 @@ It's a conformal mapping, which maps a closed 2-dim surface to a ball conformall
 
 
 [![Watch the video](conformal.png)](https://www.youtube.com/watch?v=EH7h7xJbSqo)
-[视频在bilibili](https://www.bilibili.com/video/BV1eR4y1S7SH/?spm_id_from=333.999.0.0)
+[打不开上面youtube视频在的话，这是B站备份](https://www.bilibili.com/video/BV1eR4y1S7SH/?spm_id_from=333.999.0.0)
 
 
 ### 2-Harmonic-1-form.
@@ -99,7 +99,7 @@ This is to find a harmonic 1 form on 2-dim surface. ***Below is a vedio***.
 [![Watch the video](./1_form.png)](https://youtu.be/pc_lQX7eLd4)
 
 
-[视频在bilibili](https://www.bilibili.com/video/BV1Kv4y1z77N/?spm_id_from=333.999.0.0&vd_source=5ad133d76e07ef4c319d3400d839f2bb)
+[打不开上面youtube视频在的话，这是B站备份](https://www.bilibili.com/video/BV1Kv4y1z77N/?spm_id_from=333.999.0.0&vd_source=5ad133d76e07ef4c319d3400d839f2bb)
 
 
 This repository is based on libigl-1.2 and openmesh-8.0. If you want to learn more about them, please see attach link below:
