@@ -107,8 +107,3 @@ This repository is based on libigl-1.2 and openmesh-8.0. If you want to learn mo
 `https://github.com/libigl/libigl`
 
 `https://www.graphics.rwth-aachen.de/software/openmesh/` 
-
-### Future work
-
-I'm working on replicating quadrilateral generation methods from gmsh. This is an interesting thing. If you have any question, please contact me. 
- 
