@@ -107,3 +107,7 @@ This repository is based on libigl-1.2 and openmesh-8.0. If you want to learn mo
 `https://github.com/libigl/libigl`
 
 `https://www.graphics.rwth-aachen.de/software/openmesh/` 
+
+### Similar Method at CGAL
+
+`https://doc.cgal.org/5.5.4/Surface_mesh_parameterization/index.html
